@@ -1,1 +1,1 @@
-
+<?php echo 'fail.php';
