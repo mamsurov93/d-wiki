@@ -1,1 +1,1 @@
-
+<?php echo 'status.php';
