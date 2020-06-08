@@ -26,7 +26,7 @@ $sign = hash('sha256', implode(':', array($email, $name, $amount, $currency, $se
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
     <head>
         <title>Dental Wiki</title>
         <script>function load() {document.pay.submit();}</script>
@@ -40,7 +40,6 @@ $sign = hash('sha256', implode(':', array($email, $name, $amount, $currency, $se
             <input type="hidden" name="ac_order_id" value="<? echo $orderId; ?>" />
             <input type="hidden" name="ac_sign" value="<? echo $sign; ?>" />
             <input type="hidden" name="ac_comments" value="<? echo $nickname; ?>">
-            <input type="hidden" name="login" value="<? echo $nickname; ?>" />
         </form>
     </body>
 </html>
