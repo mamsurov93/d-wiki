@@ -1,1 +1,3 @@
-<?php echo 'status.php';
+<?php
+
+echo 'Статус!';
