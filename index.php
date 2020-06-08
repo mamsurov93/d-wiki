@@ -12,7 +12,27 @@ $amount = str_replace(',', '.', get_param('amount'));
 $nickname = get_param('nickname');
 
 if (empty($amount) || empty($nickname)) {
-    echo 'Ошибка, невозможно сгенерировать ссылку для оплаты!';
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title>Dental Wiki</title>
+    </head>
+    <body>
+        <p>
+            Ошибка, невозможно сгенерировать ссылку для оплаты.<br/>
+            Обратетесь к нашему менедженра:&nbsp;<a href="https://telete.in/dental_wiki_support">@dental_wiki_support</a>
+        </p>
+        <address>
+          <p>
+            Наши контактные данные:<br/>
+            <a href="mailto:dentalwikimail@gmail.com">dentalwikimail@gmail.com</a><br/>
+            г. Москва, ул. Прищвина 21/308
+          </p>
+        </address>
+    </body>
+</html>
+HTML;
     exit;
 }
 
