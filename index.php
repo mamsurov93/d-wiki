@@ -18,6 +18,10 @@ $nickname = get_param('nickname');
 
 if (!empty($amount) && !empty($nickname)) {
 
+    echo (string)getenv('PAYEER_SHOP');
+    echo (string)getenv('PAYEER_KEY');
+    exit;
+    
     $m_shop = (string)getenv('PAYEER_SHOP');
     $m_orderId = time();
     $m_amount = $amount;
