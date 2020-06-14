@@ -1,2 +1,2 @@
-# dw-adv-c
-dw-adv-c
+# d-wiki
+d-wiki
