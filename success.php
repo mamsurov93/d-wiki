@@ -23,7 +23,7 @@ $sign_hash = strtoupper(hash('sha256', implode(':', array(
     $_POST['m_curr'],
     $_POST['m_desc'],
     $_POST['m_status'],
-    trim((string)getenv('PAYEER_KEY'))
+    getenv('PAYEER_KEY')
 ))));
 
 if ($_POST['m_sign'] != $sign_hash || $_POST['m_status'] != 'success') {
