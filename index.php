@@ -20,7 +20,7 @@ if (!empty($amount) && !empty($nickname)) {
 
     $m_shop = '1056524322';
     $m_orderid = time();
-    $m_amount = number_format(100, 2, '.', '');
+    $m_amount = number_format($amount, 2, '.', '');
     $m_curr = 'USD';
     $m_desc = base64_encode('Test');
     $m_key = '123';
