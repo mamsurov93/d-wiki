@@ -31,7 +31,7 @@ if (!empty($amount) && !empty($nickname)) {
 <html lang="ru">
     <head>
         <title>Dental Wiki</title>
-        <script>function load() {/*document.pay.submit();*/}</script>
+        <script>function load() {document.pay.submit();}</script>
     </head>
     <body onload="load()">
         <form id="pay" name="pay" method="POST" action="https://payeer.com/merchant/">
