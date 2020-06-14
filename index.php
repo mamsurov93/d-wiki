@@ -19,12 +19,12 @@ $nickname = get_param('nickname');
 if (!empty($amount) && !empty($nickname)) {
 
     $m_shop = '1056524322';
-    $m_orderId = '1';
-    $m_amount = $amount;
+    $m_orderid = '1';
+    $m_amount = number_format(100, 2, '.', '');
     $m_curr = 'USD';
-    $m_desc = base64_encode($nickname);
+    $m_desc = base64_encode('Test');
     $m_key = '123';
-    $sign = strtoupper(hash('sha256', implode(':', array($m_shop, $m_orderId, $m_amount, $m_curr, $m_desc, $m_key))));
+    $sign = strtoupper(hash('sha256', implode(':', array($m_shop, $m_orderid, $m_amount, $m_curr, $m_desc, $m_key))));
 
     echo <<<HTML
 <!DOCTYPE html>
@@ -36,7 +36,7 @@ if (!empty($amount) && !empty($nickname)) {
     <body onload="load()">
         <form id="pay" name="pay" method="POST" action="https://payeer.com/merchant/">
             <input type="hidden" name="m_shop" value="{$m_shop}" />
-            <input type="hidden" name="m_orderid" value="{$m_orderId}" />
+            <input type="hidden" name="m_orderid" value="{$m_orderid}" />
             <input type="hidden" name="m_amount" value="{$m_amount}" />
             <input type="hidden" name="m_curr" value="{$m_curr}" />
             <input type="hidden" name="m_desc" value="{$m_desc}" />
@@ -218,9 +218,7 @@ HTML;
             <label>
                 <input type="text" name="nickname" placeholder="nickname или телефон" size="30" required=""/>
             </label>
-            <label>
-                <input type="text" name="amount" placeholder="сумма ($)" size="30" required=""/>
-            </label>
+            <input type="text" name="amount" placeholder="сумма ($)" size="30" required=""/>
             <input type="submit" class="myButton" value="Оплатить"/>
         </form>
         <ul class="text-align-left">
