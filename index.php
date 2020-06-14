@@ -18,7 +18,7 @@ $nickname = get_param('nickname');
 
 if (!empty($amount) && !empty($nickname)) {
 
-    $m_shop = '1056524322';
+    $m_shop = getenv('PAYEER_SHOP');
     $m_orderid = time();
     $m_amount = number_format($amount, 2, '.', '');
     $m_curr = 'USD';
