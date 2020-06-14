@@ -3,6 +3,11 @@
 //########################################
 
 function get_param($key) {
+
+    if (!isset($_GET[$key])) {
+        return null;
+    }
+
     return trim(htmlspecialchars($_GET[$key]));
 }
 
@@ -11,16 +16,49 @@ function get_param($key) {
 $amount = str_replace(',', '.', get_param('amount'));
 $nickname = get_param('nickname');
 
-if (empty($amount) || empty($nickname)) {
+if (!empty($amount) && !empty($nickname)) {
+
+    $m_shop = getenv('PAYEER_SHOP');
+    $m_orderId = time();
+    $m_amount = $amount;
+    $m_curr = 'USD';
+    $m_desc = base64_encode($nickname);
+    $m_key = getenv('PAYEER_KEY');
+    $sign = strtoupper(hash('sha256', implode(':', array($m_shop, $m_orderId, $m_amount, $m_curr, $m_desc, $m_key))));
+
     echo <<<HTML
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title>Dental Wiki</title>
+        <script>function load() {document.pay.submit();}</script>
+    </head>
+    <body onload="load()">
+        <form id="pay" name="pay" method="POST" action="https://payeer.com/merchant/">
+            <input type="hidden" name="m_shop" value="{$m_shop}" />
+            <input type="hidden" name="m_orderid" value="{$m_orderId}" />
+            <input type="hidden" name="m_amount" value="{$m_amount}" />
+            <input type="hidden" name="m_curr" value="{$m_curr}" />
+            <input type="hidden" name="m_desc" value="{$m_desc}" />
+            <input type="hidden" name="m_sign" value="{$sign}" />
+        </form>
+    </body>
+</html>
+HTML;
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, shrink-to-fit=no, user-scalable=no">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover, shrink-to-fit=no, user-scalable=no">
     <meta name="keywords" content="dental, dental wiki, лекций, вебинары, циклы, конгрессы, стати, книги, стоматология">
-    <meta name="description" content="Dental Wiki | Большая база лекций, вебинаров, циклов, конгрессы, статей и книг по стоматологии">
+    <meta name="description"
+          content="Dental Wiki | Большая база лекций, вебинаров, циклов, конгрессы, статей и книг по стоматологии">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
@@ -116,6 +154,37 @@ if (empty($amount) || empty($nickname)) {
                 max-width: 90%
             }
         }
+
+        #payload input {
+            display: block;
+            margin-left: 20px;
+            margin-top: 5px;
+            font-size: 15px;
+        }
+
+        .myButton {
+            box-shadow: inset 0 1px 0 0 #97c4fe;
+            background: #32C5FA linear-gradient(to bottom, #32C5FA 5%, #329cff 100%);
+            border-radius: 6px;
+            border: 1px solid #32C5FA;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            font-weight: 100;
+            padding: 6px 24px;
+            text-shadow: 0 1px 0 #32C5FA;
+        }
+
+        .myButton:hover {
+            background: #1e62d0 linear-gradient(to bottom, #329cff 5%, #32C5FA 100%);
+        }
+
+        .myButton:active {
+            position: relative;
+            top: 1px;
+        }
     </style>
 </head>
 <body>
@@ -140,15 +209,28 @@ if (empty($amount) || empty($nickname)) {
         <ul class="text-align-left">
             <li>У нас самые низкие цены среди аналогичных площадок;</li>
             <li>Стоимость в несколько раз ниже официальной;</li>
-            <li>Постоянное и стабильное обновление базы;</li>
-            <li>Полная анонимность покупателя и продавца.</li>
+            <li>Постоянное и стабильное обновление базы.</li>
         </ul>
     </div>
-    <p class="margin-top-5">
-        Осуществить оплату можно через платежную систему <a href="https://advCash.com" target="_blank">AdvCash</a>
-        - эта платёжная система работает со всеми известными платежными системами и оплату можно осуществить
-        в пару кликов, любой карты и любой валюты, конвертация валюты осуществляется автоматически!
-    </p>
+    <div>
+        <h2 class="text-align-left">Форма для оплаты:</h2>
+        <form id="payload" method="GET" class="text-align-left">
+            <label>
+                <input type="text" name="nickname" placeholder="nickname или телефон" size="30" required=""/>
+            </label>
+            <label>
+                <input type="text" name="amount" placeholder="сумма ($)" size="30" required=""/>
+            </label>
+            <input type="submit" class="myButton" value="Оплатить"/>
+        </form>
+        <ul class="text-align-left">
+            <li>
+                После оплаты Вы сможете получить ссылку на<br/>
+                любой курс равен сумме перевода у нашего менеждера: <br/>
+                <a href="https://telete.in/dental_wiki_support" target="_blank">@dental_wiki_support</a>
+            </li>
+        </ul>
+    </div>
     <p class="margin-top-5">
         Повышайте свой профессионализм вместе с нами,<br/>
         приятных просмотров 😉
@@ -156,46 +238,11 @@ if (empty($amount) || empty($nickname)) {
 </main>
 <footer>
     <p>
-        Наши контактные данные:<br/>
-        <a href="mailto:dentalwikimail@gmail.com">dentalwikimail@gmail.com</a><br/>
-        г. Москва, ул. Прищвина 21/308 <br/><br/>
-
-        По всем вопросам обращайтесь к нашему:<br/>
-        <a href="https://telete.in/dental_wiki_support" target="_blank">менеджеру</a>
-        (<a href="https://telete.in/dental_wiki_support" target="_blank">@dental_wiki_support</a>)
+        По всем вопросам обращайтесь к<br/>
+        нашему менеджеру в телеграме:<br/>
+        <a href="https://telete.in/dental_wiki_support" target="_blank">@dental_wiki_support</a>
     </p>
     <img class="img" src="assets/footer.png" alt="Dental Wiki"/>
 </footer>
 </body>
-</html>
-HTML;
-    exit;
-}
-
-$email = getenv('ADV_EMAIL');
-$name = getenv('ADV_NAME');
-$currency = 'USD';
-$orderId = time();
-$secret = getenv('ADV_SECRET');
-$sign = hash('sha256', implode(':', array($email, $name, $amount, $currency, $secret, $orderId)));
-
-?>
-
-<!DOCTYPE html>
-<html lang="ru">
-    <head>
-        <title>Dental Wiki</title>
-        <script>function load() {document.pay.submit();}</script>
-    </head>
-    <body onload="load()">
-        <form id="pay" name="pay" method="POST" action="https://wallet.advcash.com/sci/">
-            <input type="hidden" name="ac_account_email" value="<? echo $email; ?>" />
-            <input type="hidden" name="ac_sci_name" value="<? echo $name; ?>" />
-            <input type="hidden" name="ac_amount" value="<? echo $amount; ?>" />
-            <input type="hidden" name="ac_currency" value="<? echo $currency; ?>" />
-            <input type="hidden" name="ac_order_id" value="<? echo $orderId; ?>" />
-            <input type="hidden" name="ac_sign" value="<? echo $sign; ?>" />
-            <input type="hidden" name="ac_comments" value="<? echo $nickname; ?>">
-        </form>
-    </body>
 </html>
