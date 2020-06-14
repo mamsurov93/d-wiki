@@ -19,7 +19,7 @@ $nickname = get_param('nickname');
 if (!empty($amount) && !empty($nickname)) {
 
     $m_shop = '1056524322';
-    $m_orderId = time();
+    $m_orderId = '1';
     $m_amount = $amount;
     $m_curr = 'USD';
     $m_desc = base64_encode($nickname);
