@@ -18,12 +18,12 @@ $nickname = get_param('nickname');
 
 if (!empty($amount) && !empty($nickname)) {
 
-    $m_shop = getenv('PAYEER_SHOP');
+    $m_shop = (string)getenv('PAYEER_SHOP');
     $m_orderId = time();
     $m_amount = $amount;
     $m_curr = 'USD';
     $m_desc = base64_encode($nickname);
-    $m_key = getenv('PAYEER_KEY');
+    $m_key = (string)getenv('PAYEER_KEY');
     $sign = strtoupper(hash('sha256', implode(':', array($m_shop, $m_orderId, $m_amount, $m_curr, $m_desc, $m_key))));
 
     echo <<<HTML
