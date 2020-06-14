@@ -23,7 +23,7 @@ if (!empty($amount) && !empty($nickname)) {
     $m_amount = number_format($amount, 2, '.', '');
     $m_curr = 'USD';
     $m_desc = base64_encode($nickname);
-    $m_key = '123';
+    $m_key = getenv('PAYEER_KEY');
     $sign = strtoupper(hash('sha256', implode(':', array($m_shop, $m_orderid, $m_amount, $m_curr, $m_desc, $m_key))));
 
     echo <<<HTML
